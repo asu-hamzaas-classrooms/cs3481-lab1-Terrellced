@@ -46,7 +46,7 @@ uint64_t Tools::buildLong(uint8_t bytes[LONGSIZE])
   uint64_t answer = 0;
   for(int i = 0; i < 8; i++)
   {
-    answer |= bytes[i] << 
+    answer = answer | (uint64_t)bytes[i] << (i * 8);
   }
 
   return answer;
@@ -75,10 +75,10 @@ uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
 {
   if(byteNum >= 8 || byteNum < 0) return 0;
 
-  
+  return (source >> (byteNum * 8) ) & 0xFF;
 
 
-  return 0;
+
 }
 
 /**
@@ -108,6 +108,9 @@ uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
  */
 uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
 {
+
+
+
   return 0;
 }
 
@@ -161,6 +164,10 @@ uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
  */
 uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 {
+   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
+
+  
+
   return 0;
 }
 
