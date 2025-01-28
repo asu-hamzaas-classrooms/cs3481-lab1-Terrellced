@@ -151,13 +151,12 @@ uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
 
   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
 
-  //int32_t numbits = high - low + 1;
-  //uint64_t wantedBits = getBits(source, low, high); //the bits i want
-  //try to just shift them from side to side.
-  uint64_t mask = 0xffffffffffffffff;
+  
+  uint64_t mask = getBits(~0ul, low, high) << low;
+
   
 
-  return source | wantedBits;
+  return source | mask;
 }
 
 /**
@@ -264,7 +263,7 @@ uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
  */
 uint64_t Tools::sign(uint64_t source)
 {
-  uint64 sign = getBits(source,63,63);
+  //uint64 sign = getBits(source,63,63);
 
   return 0;
 }
