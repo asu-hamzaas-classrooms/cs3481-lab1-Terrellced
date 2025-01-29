@@ -236,6 +236,10 @@ uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 uint64_t Tools::copyBits(uint64_t source, uint64_t dest, 
                          int32_t srclow, int32_t dstlow, int32_t length)
 {
+  if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
+
+
+
    return 0; 
 }
 
@@ -283,9 +287,10 @@ uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
  */
 uint64_t Tools::sign(uint64_t source)
 {
-  uint64_t sign = getBits(source,63,63);
+  uint64_t sign = source >> 63;
 
-  return 0;
+
+  return sign & 1;
 }
 
 /**
