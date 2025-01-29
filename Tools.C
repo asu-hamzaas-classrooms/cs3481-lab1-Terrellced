@@ -118,7 +118,7 @@ uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
 
 }
   return (source & mask) >> low;
-   //put an if to see if it is equal to 64 need to remove the if.
+   //put an if to see if it is equal to 64 need to remove the if. Come back to fix.
 
   
 }
@@ -191,15 +191,20 @@ uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
    if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
 
     //uint64_t mask;
-    uint64_t mask = 1ULL << (63 - high);
-    mask = mask >> ((63 - high) + low);
-    //mask = ~(((1UL << (high - low + 1)) - 1) << low); Correct
+    //uint64_t mask = 1ULL << (63 - high);
+    uint64_t mask = 0xFFFFFFFFFFFFFFFF;
     
+    mask = mask << (63 - high);
+    mask = mask >> (63 - high);
+    mask = mask >> low;
+    mask = mask << low;
+    
+    mask = ~mask;
 
 
-  //return source & mask; Correct
+  
 
-  return 0;
+  return source & mask;
 
 }
 
@@ -278,7 +283,7 @@ uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
  */
 uint64_t Tools::sign(uint64_t source)
 {
-  //uint64 sign = getBits(source,63,63);
+  uint64_t sign = getBits(source,63,63);
 
   return 0;
 }
