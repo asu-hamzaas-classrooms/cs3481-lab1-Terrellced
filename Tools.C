@@ -236,7 +236,7 @@ uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 uint64_t Tools::copyBits(uint64_t source, uint64_t dest, 
                          int32_t srclow, int32_t dstlow, int32_t length)
 {
-  if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
+  //if (srclow > high || srclow < 0 || srclow > 63 || high < 0 || high > 63) return source;
 
 
 
@@ -320,6 +320,16 @@ bool Tools::addOverflow(uint64_t op1, uint64_t op2)
   //      Thus, the way to check for an overflow is to compare the signs of the
   //      operand and the result.  For example, if you add two positive numbers, 
   //      the result should be positive, otherwise an overflow occurred.
+
+  //if(sign(op1) == 0 || sign(op2) == 0)
+  uint64_t answer;
+
+  uint64_t operator1 = op1;
+  uint64_t operator2 = op2;
+
+  answer = operator1 + operator2;
+  if(sign(answer) != sign(operator1) && sign(answer) != sign(operator2)) return true;
+  
   return false;
 }
 
@@ -349,5 +359,14 @@ bool Tools::subOverflow(uint64_t op1, uint64_t op2)
   //Note: you can not simply use addOverflow in this function.  If you negate
   //op1 in order to an add, you may get an overflow. 
   //NOTE: the subtraction is op2 - op1 (not op1 - op2).
-  return false;
+
+  uint64_t answer;
+  uint64_t operator1 = (~op1) + 1; //invert then add 1
+  uint64_t operator2 = op2;
+  answer = operator2 + operator1; //op2 + (-op1)
+
+  if(sign(operator1) != sign(operator2)) return false;
+  else if(sign(op1) != sign(answer)) return false;
+  
+  return true;
 }
