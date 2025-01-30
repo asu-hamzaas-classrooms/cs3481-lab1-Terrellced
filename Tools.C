@@ -151,14 +151,8 @@ uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
   
   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
 
-
-  uint64_t mask = getBits(~0ul, low, high) << low;
-  //uint64_t mask = 0xFFFFFFFFFFFFFFFF;
-  //uint32_t highest = 63 - high;
-  //mask = mask << highest; 
-  //mask = mask >> (highest + low);
-  //mask = mask << low;
-
+  uint64_t ffmask = 0xFFFFFFFFFFFFFFFF;
+  uint64_t mask = getBits(ffmask, low, high) << low;
 
   
 
@@ -238,7 +232,7 @@ uint64_t Tools::copyBits(uint64_t source, uint64_t dest,
 {
   if(srclow < 0 ||dstlow < 0 || srclow > 63 || dstlow > 63 || length > 63 || length < 63) return dest;
   
-  uint64_t holder = getBits(source, srclow, length - 1);
+  uint64_t holder1 = getBits(source, srclow, length - 1);
 
 
 
@@ -268,12 +262,12 @@ uint64_t Tools::copyBits(uint64_t source, uint64_t dest,
  */
 uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
 {
-  //uint64_t mask = 0xFFFFFFFFFFFFFFFF;
-  uint64_t mask = 0ULL;
-  uint64_t shift = getByte(source, byteNum); //shift mask >>
-  shift = shift & 0xFF;
+  uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  //uint64_t mask = 0ULL;
+  uint64_t shift = getByte(mask, byteNum) << (byteNum * 8); //shift mask >>
+  //shift = shift & 0xFF;
 
-  mask = mask | shift;
+  //mask = mask | shift;
   // mask = mask & shift;
 
   // uint64_t mask = 0xFFFFFFFFFFFFFF;
