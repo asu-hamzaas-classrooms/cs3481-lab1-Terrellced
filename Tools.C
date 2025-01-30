@@ -44,9 +44,11 @@
 uint64_t Tools::buildLong(uint8_t bytes[LONGSIZE])
 {
   uint64_t answer = 0;
-  for(int i = 0; i < 8; i++)
+  int i = 0;
+  while(i < 8)
   {
     answer = answer | (uint64_t)bytes[i] << (i * 8);
+    i++;
   }
 
   return answer;
@@ -74,8 +76,8 @@ uint64_t Tools::buildLong(uint8_t bytes[LONGSIZE])
 uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
 {
   if(byteNum >= 8 || byteNum < 0) return 0;
-
-  return (source >> (byteNum * 8)) & 0xFF;
+  uint64_t mask = 0x00000000000000FF;
+  return (source & (mask << (byteNum * 8))) >> (byteNum * 8);
 
 
 
@@ -111,7 +113,6 @@ uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return 0;
 
   uint64_t mask = 0xFFFFFFFFFFFFFFFF;
-
   uint32_t highest = 63 - high;
   mask = mask << highest; 
   mask = mask >> (highest + low);
@@ -238,7 +239,7 @@ uint64_t Tools::copyBits(uint64_t source, uint64_t dest,
 {
   if(srclow < 0 ||dstlow < 0 || srclow > 63 || dstlow > 63 || length > 63 || length < 63) return dest;
   
-  uint64_t holder = getBits(source, srclow, length);
+  uint64_t holder = getBits(source, srclow, length - 1);
 
 
 
@@ -269,7 +270,7 @@ uint64_t Tools::copyBits(uint64_t source, uint64_t dest,
 uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
 {
   //uint64_t mask = 0xFFFFFFFFFFFFFFFF;
-  uint64_t mask = 0x0ULL;
+  uint64_t mask = 0ULL;
   uint64_t shift = getByte(source, byteNum); //shift mask >>
   shift = shift & 0xFF;
 
