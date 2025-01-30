@@ -230,14 +230,20 @@ uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 uint64_t Tools::copyBits(uint64_t source, uint64_t dest, 
                          int32_t srclow, int32_t dstlow, int32_t length)
 {
-  if(srclow < 0 ||dstlow < 0 || srclow > 63 || dstlow > 63 || length > 63 || length < 63) return dest;
+  if(srclow < 0 || dstlow < 0 || srclow > 63 || dstlow > 63 || length > 63 || (srclow + length - 1) > 63 || (dstlow + length - 1) > 63)
+  {
+    return dest;
+  } 
   
-  uint64_t holder1 = getBits(source, srclow, length - 1);
+  uint64_t sourcebits = getBits(source, srclow, srclow + length - 1);
+  //uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  uint64_t destbits = clearBits(dest, dstlow, dstlow + length - 1);
+  sourcebits = sourcebits << dstlow;
+  sourcebits = sourcebits | destbits;
 
 
 
-
-   return 0; 
+   return sourcebits; 
 }
 
 
@@ -262,9 +268,16 @@ uint64_t Tools::copyBits(uint64_t source, uint64_t dest,
  */
 uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
 {
-  uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  //Edit because it uses another functions if.
+  uint64_t mask = 0x00000000000000FF;
+
+  mask = mask << (byteNum * 8);
+  
   //uint64_t mask = 0ULL;
-  uint64_t shift = getByte(mask, byteNum) << (byteNum * 8); //shift mask >>
+  //uint64_t shift = getByte(mask, byteNum) << (byteNum * 8);
+
+
+
   //shift = shift & 0xFF;
 
   //mask = mask | shift;
@@ -293,7 +306,7 @@ uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
   //     return source;
   // }
 
-  return source | shift;
+  return source ^ mask;
 }
 
 
