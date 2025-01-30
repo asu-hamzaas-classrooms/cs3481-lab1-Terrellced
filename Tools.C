@@ -113,7 +113,7 @@ uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
   uint64_t mask = 0xFFFFFFFFFFFFFFFF;
 
     mask = mask << (63 - high); 
-    mask = mask >> ((63 - high) + low);
+    mask = mask >> (63 - high) + low;
     mask = mask << low;
 
 
@@ -155,7 +155,7 @@ uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
     uint64_t mask = 0xFFFFFFFFFFFFFFFF;
 
     mask = mask << (63 - high); 
-    mask = mask >> ((63 - high) + low);
+    mask = mask >> (63 - high) + low;
     mask = mask << low;
 
 
@@ -193,7 +193,7 @@ uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
     uint64_t mask = 0xFFFFFFFFFFFFFFFF;
     
     mask = mask << (63 - high); 
-    mask = mask >> ((63 - high) + low);
+    mask = mask >> (63 - high) + low;
     mask = mask << low;
     
     mask = ~mask;
@@ -233,7 +233,10 @@ uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 uint64_t Tools::copyBits(uint64_t source, uint64_t dest, 
                          int32_t srclow, int32_t dstlow, int32_t length)
 {
-  //if (srclow > high || srclow < 0 || srclow > 63 || high < 0 || high > 63) return source;
+  if(srclow < 0 ||dstlow < 0 || srclow > 63 || dstlow > 63 || length > 63 || length < 63) return dest;
+  
+  uint64_t holder = getBits(source, srclow, length);
+
 
 
 
