@@ -268,7 +268,38 @@ uint64_t Tools::copyBits(uint64_t source, uint64_t dest,
  */
 uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
 {
-  return 0;
+  //uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  uint64_t mask = 0x0ULL;
+  uint64_t shift = getByte(source, byteNum); //shift mask >>
+  shift = shift & 0xFF;
+
+  mask = mask | shift;
+  // mask = mask & shift;
+
+  // uint64_t mask = 0xFFFFFFFFFFFFFF;
+  // uint64_t shifting = mask << (byteNum * 8);
+  
+
+
+
+  //mask = mask | bytes;
+
+
+  // uint64_t updated;
+  // switch(byteNum){
+  //   case 0:
+  //     updated = source | 0x00000000000000FF;
+
+
+
+
+
+
+  //   default:
+  //     return source;
+  // }
+
+  return source | shift;
 }
 
 
