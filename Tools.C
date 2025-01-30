@@ -111,13 +111,12 @@ uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
 uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
 {
   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return 0;
-
-  uint64_t mask = 0xFFFFFFFFFFFFFFFF;
-  uint32_t highest = 63 - high;
-  mask = mask << highest; 
-  mask = mask >> (highest + low);
-  mask = mask << low;
-
+  //uint64_t mask2 = 0xFFFFFFFFFFFFFFFF;
+  if(low == 0 && high == 63) return source;
+  uint64_t mask = ((1ULL << (high - low + 1)) - 1) << low;
+  //mask = mask | mask2;
+  
+// getBitsTests: failed on line 298 in main.C, Expected 1122334455667788, Got 0
 
   return (source & mask) >> low;
 
@@ -153,12 +152,12 @@ uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
 
 
-  //uint64_t mask = getBits(~0ul, low, high) << low;
-  uint64_t mask = 0xFFFFFFFFFFFFFFFF;
-  uint32_t highest = 63 - high;
-  mask = mask << highest; 
-  mask = mask >> (highest + low);
-  mask = mask << low;
+  uint64_t mask = getBits(~0ul, low, high) << low;
+  //uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  //uint32_t highest = 63 - high;
+  //mask = mask << highest; 
+  //mask = mask >> (highest + low);
+  //mask = mask << low;
 
 
   
