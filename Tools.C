@@ -112,9 +112,10 @@ uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
 
   uint64_t mask = 0xFFFFFFFFFFFFFFFF;
 
-    mask = mask << (63 - high); 
-    mask = mask >> (63 - high) + low;
-    mask = mask << low;
+  uint32_t highest = 63 - high;
+  mask = mask << highest; 
+  mask = mask >> (highest + low);
+  mask = mask << low;
 
 
   return (source & mask) >> low;
@@ -147,16 +148,16 @@ uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
  */
 uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
 {
-
+  
   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
 
 
   //uint64_t mask = getBits(~0ul, low, high) << low;
-    uint64_t mask = 0xFFFFFFFFFFFFFFFF;
-
-    mask = mask << (63 - high); 
-    mask = mask >> (63 - high) + low;
-    mask = mask << low;
+  uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  uint32_t highest = 63 - high;
+  mask = mask << highest; 
+  mask = mask >> (highest + low);
+  mask = mask << low;
 
 
   
@@ -186,17 +187,19 @@ uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
  */
 uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 {
-   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
 
-    //uint64_t mask;
-    //uint64_t mask = 1ULL << (63 - high);
-    uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
+
+  //uint64_t mask;
+  //uint64_t mask = 1ULL << (63 - high);
+  uint64_t mask = 0xFFFFFFFFFFFFFFFF;
     
-    mask = mask << (63 - high); 
-    mask = mask >> (63 - high) + low;
-    mask = mask << low;
+  uint32_t highest = 63 - high;
+  mask = mask << highest; 
+  mask = mask >> (highest + low);
+  mask = mask << low;
     
-    mask = ~mask;
+  mask = ~mask;
 
 
   
@@ -366,7 +369,7 @@ bool Tools::subOverflow(uint64_t op1, uint64_t op2)
   answer = operator2 + operator1; //op2 + (-op1)
 
   if(sign(operator1) != sign(operator2)) return false;
-  else if(sign(op1) != sign(answer)) return false;
+  if(sign(op1) != sign(answer)) return false;
   
   return true;
 }
