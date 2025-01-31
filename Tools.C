@@ -113,8 +113,11 @@ uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return 0;
 
   uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  //shifts the mask to the left pushing leftmost bits
   mask = mask << (63 - high);
+  //shifts it back to the right holding the range of bits wanted
   mask = mask >> ((63 - high) + low);
+  //shifts back to the left to align
   mask = mask << low;
 
   return (source & mask) >> low;
@@ -264,9 +267,11 @@ uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
   //uint64_t mask = 0x00000000000000FF;
 
   //mask = mask << (byteNum * 8);
-  
+  //sets the mask = to the source with the bit range changed to ff (setbits)
+  //need a way to get the low then high.s
+  uint64_t mask = setBits(source, byteNum * 8, (byteNum * 8) + 7);
 
-  return source;
+  return source | mask;
 }
 
 
