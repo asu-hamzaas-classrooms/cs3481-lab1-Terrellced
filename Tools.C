@@ -184,17 +184,10 @@ uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 
   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return source;
 
-  //uint64_t mask;
-  //uint64_t mask = 1ULL << (63 - high);
-  uint64_t mask = 0xFFFFFFFFFFFFFFFF;
-    
-  uint32_t highest = 63 - high;
-  mask = mask << highest; 
-  mask = mask >> (highest + low);
-  mask = mask << low;
-    
-  mask = ~mask;
+  uint64_t fmask = 0xFFFFFFFFFFFFFFFF;
+  uint64_t mask = getBits(fmask, low, high) << low;
 
+  mask = ~mask;
 
   
 
