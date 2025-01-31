@@ -111,12 +111,11 @@ uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
 uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
 {
   if (low > high || low < 0 || low > 63 || high < 0 || high > 63) return 0;
-  //uint64_t mask2 = 0xFFFFFFFFFFFFFFFF;
-  if(low == 0 && high == 63) return source;
-  uint64_t mask = ((1ULL << (high - low + 1)) - 1) << low;
-  //mask = mask | mask2;
-  
-// getBitsTests: failed on line 298 in main.C, Expected 1122334455667788, Got 0
+
+  uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  mask = mask << (63 - high);
+  mask = mask >> ((63 - high) + low);
+  mask = mask << low;
 
   return (source & mask) >> low;
 
@@ -262,44 +261,12 @@ uint64_t Tools::copyBits(uint64_t source, uint64_t dest,
 uint64_t Tools::setByte(uint64_t source, int32_t byteNum)
 {
   //Edit because it uses another functions if.
-  uint64_t mask = 0x00000000000000FF;
+  //uint64_t mask = 0x00000000000000FF;
 
-  mask = mask << (byteNum * 8);
-  
-  //uint64_t mask = 0ULL;
-  //uint64_t shift = getByte(mask, byteNum) << (byteNum * 8);
-
-
-
-  //shift = shift & 0xFF;
-
-  //mask = mask | shift;
-  // mask = mask & shift;
-
-  // uint64_t mask = 0xFFFFFFFFFFFFFF;
-  // uint64_t shifting = mask << (byteNum * 8);
+  //mask = mask << (byteNum * 8);
   
 
-
-
-  //mask = mask | bytes;
-
-
-  // uint64_t updated;
-  // switch(byteNum){
-  //   case 0:
-  //     updated = source | 0x00000000000000FF;
-
-
-
-
-
-
-  //   default:
-  //     return source;
-  // }
-
-  return source ^ mask;
+  return source;
 }
 
 
